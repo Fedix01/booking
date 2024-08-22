@@ -3,30 +3,39 @@
 
         <div class="col-3 bg-dark p-2 rounded text-white d-flex flex-column">
             <h5>SEARCH</h5>
-            <input type="text" class="my-4" placeholder="Inserisci una città">
-            <button class="btn btn-success">CERCA</button>
+            <form #f="ngForm" class="d-flex flex-column" (submit)="searchHotels(f.value.text)">
+            <input type="text" 
+            [ngModel]="text" 
+            name="text"
+             class="my-4" placeholder="Inserisci una città">
+            <button class="btn btn-success" type="submit">CERCA</button>
+            </form>
 
-            <h5 class="my-3">Hotel in Milano</h5>
-            <ul class="list">
-                <li>Hotel ABC</li>
-                <li>Hotel XYZ</li>
-                <li>Hotel Rockstar</li>
-                <li>Hotel Venezia</li>
-            </ul>
+            <h5 class="my-3">Hotel in {{text}}</h5>
+            <div class="list d-flex justify-content-between" *ngFor="let hotel of hotels">
+                <div (click)="setActive(hotel)"
+                [ngClass]="{'active': hotel.id === active?.id}">{{hotel.name}}</div>
+               <span>{{hotel.rooms[0].price | number:'1.2-2'}}€</span>
+            </div>
 
-            <h6>Risultati: 4</h6>
+            <h6 class="mt-3">Risultati: {{hotels.length}}</h6>
         </div>
 
         <div class="col-6 rounded text-white">
             <div class="d-flex flex-column">
                 <div class="row g-2">
+                    <div class="card">
+                        <img height="300px" src="data:image/jpeg;base64,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" class="card-img-top" alt="...">
+                    </div>
                     <div class="col-12 rounded bg-dark p-2">
-                        <h4>Hotel ABC</h4>
-                        <h6>Milano Via Marconi, 123</h6>
+                        <h4>{{active?.name}}</h4>
+                        <h6>{{active?.location?.address}}</h6>
                     </div>
                     <div class="row mt-5">
-                    <div class="col-6 rounded bg-dark p-2">
-                        <img height="30px" width="30px">
+                    <div class="col-6 rounded bg-dark p-2 d-flex flex-wrap" >
+                        <div *ngFor="let img of active?.images">
+                        <img height="100px" width="100px" src="{{img}}">
+                    </div>
                     </div>
                     <div class="col-6 rounded bg-dark p-2">
                         <h3>Icone</h3>
@@ -36,9 +45,9 @@
             </div>
         </div>
         <div class="col-3 rounded bg-dark p-2 text-white">
-            <div class="row">
-                <div class="col-12 mb-3">
-                    <div class="rounded bg-dark p-2 text-center">
+            <div class="d-flex flex-column">
+                <div class="row g-2 mb-2"></div>
+                    <div class="col-12 rounded bg-dark p-2">
                         <h4>4.5</h4>
                         <p>★★★★☆</p>
                         <ul>
@@ -47,10 +56,8 @@
                             <li>Triple</li>
                         </ul>
                     </div>
-                </div>
-                
-                <div class="col-12">
-                    <div class="rounded bg-dark p-2 text-center">
+            <div class="row mt-3">
+                <div class="col-12 mt-5 rounded bg-dark p-2">
                         <h3>Contatti</h3>
                         <form action="">
                             <div class="my-3">
@@ -63,10 +70,10 @@
                             </div>
                             <button class="btn btn-success">Invia</button>
                         </form>
-                    </div>
                 </div>
             </div>
+            
         </div>
         
-        </div>
+    </div>
 </div>

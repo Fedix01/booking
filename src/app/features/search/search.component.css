@@ -1,6 +1,11 @@
-ul {
+.list{
     list-style: none;
 }
-li {
+.list div {
     border-bottom: 1px solid gray;
+    padding: 10px;
+}
+
+.active {
+    color: green;
 }
