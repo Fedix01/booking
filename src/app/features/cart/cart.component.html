@@ -1,7 +1,7 @@
 <div class="wrapper">
 <div class="row">
     <div class="col-12">
-        <h3>Cart(1)</h3>
+        <h3>Cart ({{cart.items.length}})</h3>
     </div>
 </div>
 <table class="table">
@@ -14,13 +14,17 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>Hotel rockstar</td>
-        <td>Single</td>
-        <td>89€</td>
-        <th>Bidone</th>
+      <tr *ngFor="let item of cart.items">
+        <td>{{item.hotel?.name}}</td>
+        <td>{{item.room?.label}}</td>
+        <td>{{item.room?.price}}</td>
+        <th (click)="cart.removefromCart(item)">Bidone</th>
       </tr>
       <tr>
     </tbody>
   </table>
+
+  <button *ngIf="cart.items.length"
+  type="submit"
+  (click)="cart.proceed()">Proceed</button>
 </div>
