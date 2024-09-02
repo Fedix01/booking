@@ -1,8 +1,10 @@
 import { CartService } from './../../core/services/cart.service';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Hotel, Room } from './model/hotel.model';
 import { faTrain, faBeer, faCar} from '@fortawesome/free-solid-svg-icons';
+import { environment } from '../../../environments/environment.development';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -11,9 +13,10 @@ import { faTrain, faBeer, faCar} from '@fortawesome/free-solid-svg-icons';
 })
 
 
-export class SearchComponent {
+export class SearchComponent implements OnInit {
+apiUrl = environment.API_URL;
 text = 'Rome';
-hotels: Hotel[] = [];
+hotels$ = new Observable<Hotel[]>();
 active: Hotel | undefined;
 
 email:string = '';
@@ -60,12 +63,13 @@ constructor(private http: HttpClient,
 ) {
   this.searchHotels(this.text);
 }
-searchHotels(text: string) {
+
+ngOnInit(): void {
+  this.hotels$ = this.searchHotels(this.text)
+}
+searchHotels(text: string):Observable<Hotel[]> {
   this.text = text;
-  this.http.get<Hotel[]>('http://localhost:3000/hotels?q=' + text)
-    .subscribe(result => {
-      this.hotels = result
-    });
+  return this.http.get<Hotel[]>(`${this.apiUrl}/hotels?q=${text}`);
 }
 
 setActive(hotel:Hotel) {
